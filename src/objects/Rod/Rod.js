@@ -31,8 +31,12 @@ export class Rod extends GameObject {
 
     onCollideWithHero() {
         //remove the rod
-        this.parent.removeChild(this);
+        this.destroy();
         //emit event
+        events.emit("HERO_PICKS_UP_ITEM", {
+            image: resources.images.rod,
+            position: this.position
+        });
     }
 
 }
