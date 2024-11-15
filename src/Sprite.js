@@ -1,6 +1,7 @@
 import { Vector2 } from './Vector2.js';
+import { GameObject } from './GameObject.js';
 
-export class Sprite {
+export class Sprite extends GameObject {
     constructor({
         resource, //image we want to draw
         frameSize, //size of the frame in the sprite sheet
@@ -11,6 +12,7 @@ export class Sprite {
         position, // where to draw
         animations
     }) {
+        super({});
         this.resource = resource;
         this.frameSize = frameSize ?? new Vector2(16, 16);
         this.hFrames = hFrames ?? 1;

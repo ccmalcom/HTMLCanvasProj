@@ -10,17 +10,26 @@ import { walls } from './src/levels/level1';
 import { Animations } from './src/Animations';
 import { FrameIndexPattern } from './src/FrameIndexPattern';
 import { STAND_DOWN, STAND_UP, STAND_LEFT, STAND_RIGHT, WALK_DOWN, WALK_LEFT, WALK_RIGHT, WALK_UP } from './src/objects/Hero/heroAnimations';
+import { GameObject } from './src/GameObject';
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
+
+const mainScene = new GameObject({
+  position: new Vector2(0, 0)
+});
+
+//todo: move to a separate file when more than one level
 const skySprite = new Sprite({
   resource: resources.images.sky,
   frameSize: new Vector2(320, 180)
 });
+mainScene.addChild(skySprite);
 const groundSprite = new Sprite({
   resource: resources.images.ground,
   frameSize: new Vector2(320, 180)
 });
+mainScene.addChild(groundSprite);
 const hero = new Sprite({
   resource: resources.images.hero,
   frameSize: new Vector2(32, 32),
@@ -114,16 +123,19 @@ const tryMove = () => {
 
 }
 const draw = () => {
-  skySprite.drawImage(ctx, 0, 0);
-  groundSprite.drawImage(ctx, 0, 0);
 
-  // Center the Hero in the cell
-  const heroOffset = new Vector2(-8, -21);
-  const heroPosX = hero.position.x + heroOffset.x;
-  const heroPosY = hero.position.y + 1 + heroOffset.y;
+  mainScene.draw(ctx, 0, 0);
 
-  shadow.drawImage(ctx, heroPosX, heroPosY);
-  hero.drawImage(ctx, heroPosX, heroPosY);
+  // skySprite.drawImage(ctx, 0, 0);
+  // groundSprite.drawImage(ctx, 0, 0);
+
+  // // Center the Hero in the cell
+  // const heroOffset = new Vector2(-8, -21);
+  // const heroPosX = hero.position.x + heroOffset.x;
+  // const heroPosY = hero.position.y + 1 + heroOffset.y;
+
+  // shadow.drawImage(ctx, heroPosX, heroPosY);
+  // hero.drawImage(ctx, heroPosX, heroPosY);
 }
 
 const gameLoop = new GameLoop(update, draw);
