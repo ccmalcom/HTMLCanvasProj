@@ -9,6 +9,7 @@ import { GameObject } from "./src/GameObject.js";
 import { Hero } from "./src/objects/Hero/Hero.js";
 import { events } from "./src/Events.js";
 import { Camera } from './src/Camera.js';
+import { Rod } from './src/objects/Rod/Rod.js';
 
 
 //get the canvas and context
@@ -36,8 +37,12 @@ mainScene.addChild(groundSprite);
 const hero = new Hero(gridCells(6), gridCells(5));
 mainScene.addChild(hero);
 
+//Camera
 const camera = new Camera();
 mainScene.addChild(camera);
+
+const rod = new Rod(gridCells(7), gridCells(6));
+mainScene.addChild(rod);
 
 //create the input object
 mainScene.input = new Input();
