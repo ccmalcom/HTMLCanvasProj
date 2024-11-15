@@ -21,6 +21,7 @@ export class Inventory extends GameObject {
                 id: this.nextId,
                 image: resources.images.rod
             })
+            console.log('rod added to inventory');
             this.renderInventory();
         });
 
