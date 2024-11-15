@@ -10,6 +10,7 @@ import { FrameIndexPattern } from "../../FrameIndexPattern.js";
 import { gridCells } from "../../helpers/grid.js";
 import { WALK_DOWN, WALK_UP, WALK_LEFT, WALK_RIGHT, STAND_DOWN, STAND_UP, STAND_LEFT, STAND_RIGHT } from "./HeroAnimations.js";
 import { moveTowards } from "../../helpers/moveTowards.js";
+import { events } from "../../Events.js";
 
 
 
@@ -57,7 +58,17 @@ export class Hero extends GameObject {
         if (hasArrived) {
             this.tryMove(root);
         }
+        this.tryEmitPosition();
     }
+
+    tryEmitPosition() {
+        // only emit if the hero has moved
+        if (this.lastX === this.position.x && this.lastY === this.position.y) return;
+        this.lastX = this.position.x;
+        this.lastY = this.position.y;
+        events.emit('HERO_POSITION', this.position);
+    }
+
     tryMove(root) {
         const { input } = root;
         if (!input.direction) {

@@ -7,9 +7,6 @@ export const gridCells = n => {
 export const isSpaceFree = (walls, x, y) => {
     //check if the space is free
     const str = `${x},${y}`;
-    console.log('walls', walls);
-    console.log(str);
     const isWallPresent = walls.has(str);
-    console.log(!isWallPresent);
     return !isWallPresent;
 }

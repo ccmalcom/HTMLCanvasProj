@@ -25,7 +25,7 @@ export class GameLoop {
 
         // update game logic as we accumulate time
         while (this.accumulatedTime >= this.timeStep) {
-            console.log('update');
+            // console.log('update');
             this.update(this.timeStep);
             this.accumulatedTime -= this.timeStep;
         }

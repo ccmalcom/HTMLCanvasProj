@@ -10,7 +10,6 @@ export class Input {
 
         this.heldDirections = [];
         document.addEventListener('keydown', (e) => {
-            console.log(e.code);
             switch (e.code) {
                 case 'ArrowUp':
                     this.onArrowPressed(UP);

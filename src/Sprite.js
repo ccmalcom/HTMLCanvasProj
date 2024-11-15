@@ -40,7 +40,6 @@ export class Sprite extends GameObject {
 
     step(delta) {
         if (!this.animations) {
-            console.log('no animations');
             return;
         }
         this.animations.step(delta);
