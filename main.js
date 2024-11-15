@@ -10,6 +10,7 @@ import { Hero } from "./src/objects/Hero/Hero.js";
 import { events } from "./src/Events.js";
 import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
+import { Inventory } from './src/objects/Inventory/Inventory.js';
 
 
 //get the canvas and context
@@ -44,6 +45,8 @@ mainScene.addChild(camera);
 const rod = new Rod(gridCells(7), gridCells(6));
 mainScene.addChild(rod);
 
+const inventory = new Inventory();
+
 //create the input object
 mainScene.input = new Input();
 
@@ -72,6 +75,9 @@ const draw = () => {
 
   //restore the state
   ctx.restore();
+
+  //draw anything above game world
+  inventory.draw(ctx, 0, 0);
 }
 
 //start the game loop
