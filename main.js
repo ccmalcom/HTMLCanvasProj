@@ -50,7 +50,7 @@ const update = (delta) => {
 }
 
 const draw = () => {
-
+  //todo: add way to toggle camera effect
   //clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
