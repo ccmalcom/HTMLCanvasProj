@@ -11,6 +11,7 @@ export const isSpaceFree = (walls, x, y) => {
     return !isWallPresent;
 }
 
+//TODO: combine buildGrid and buildMap functions
 //method to build valid map grid
 export const buildGrid = (width, height, cutouts) => {
     console.log('building grid');
@@ -48,6 +49,15 @@ export const buildGrid = (width, height, cutouts) => {
             }
         });
     }
+    //todo: build map based on grid + 1 extra bottom row (inaccessible)
+    //need to modify groupMapping to handle cutouts (two top left, two top right, etc)
+    //...
+
+    //todo: add items to grid/map (trees, rocks, etc) (on top of the ground)
+    //? create Ground class that has sprite and type (topLeftGround, topRightGround, etc)
+    //? create Item class that has sprite and type (tree, rock, etc)
+    //? different items may interact with hero differently (rock can be pushed, tree can be chopped, etc)
+
     console.log(grid);
     return grid;
 }

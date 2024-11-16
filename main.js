@@ -36,8 +36,9 @@ const groundSprite = new Sprite({
 });
 // mainScene.addChild(groundSprite);
 
-//TODO: create map dynamically with below code
-//levelMap is object of [string, string] pairs, where key is sprite sheet frame and value is cell location
+//TODO: make this better
+//1. make grid and make map could be combined
+
 const mapSprite = new Map(grid);
 mapSprite.buildMap().forEach(sprite => {
   console.log('sprite:', sprite);
