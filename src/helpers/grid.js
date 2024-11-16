@@ -12,6 +12,9 @@ export const isSpaceFree = (walls, x, y) => {
 }
 
 //TODO: combine buildGrid and buildMap functions
+// grid used to set map, put tiles on map, and add items to tiles
+// map also keeps track of items on tiles
+
 //method to build valid map grid
 export const buildGrid = (width, height, cutouts) => {
     console.log('building grid');
