@@ -8,6 +8,7 @@ class Resources {
             hero: "sprites/hero-sheet.png",
             shadow: "sprites/shadow.png",
             rod: "sprites/rod.png",
+            spriteSheet: "sprites/spritesheet.png"
         }
 
         //bucket for loaded images

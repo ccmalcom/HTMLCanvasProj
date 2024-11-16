@@ -11,7 +11,7 @@ import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
 import { Inventory } from './src/objects/Inventory/Inventory.js';
 import { grid } from './src/levels/level1.js';
-
+import { Map } from './src/objects/Map/Map.js';
 
 //get the canvas and context
 const canvas = document.getElementById('game-canvas');
@@ -35,6 +35,11 @@ const groundSprite = new Sprite({
   frameSize: new Vector2(320, 180)
 });
 mainScene.addChild(groundSprite);
+
+//TODO: create map dynamically with below code
+const map = new Map(grid);
+mainScene.addChild(map);
+
 
 const hero = new Hero(gridCells(3), gridCells(6), grid);
 mainScene.addChild(hero);
