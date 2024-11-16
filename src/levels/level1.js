@@ -1,5 +1,4 @@
 import { buildGrid } from "../helpers/grid";
-import { groundMapping } from "../helpers/spriteSheetMapping";
 
 
 const levelWidth = 13;
@@ -37,17 +36,17 @@ const cutouts = [
 
 export const grid = buildGrid(levelWidth, levelHeight, cutouts);
 
-export const map = (grid) => {
-    //sorted 
-    const sorted = {};
-    grid.forEach(cell => {
-        const [x, y] = cell.split(',').map(Number);
-        const frame = groundMapping(x, y);
+// export const map = (grid) => {
+//     //sorted 
+//     const sorted = {};
+//     grid.forEach(cell => {
+//         const [x, y] = cell.split(',').map(Number);
+//         const frame = groundMapping(x, y);
 
-        if (!sorted[frame]) {
-            sorted[frame] = [];
-        }
-        sorted[frame].push(cell);
-    });
-    return sorted;
-}
+//         if (!sorted[frame]) {
+//             sorted[frame] = [];
+//         }
+//         sorted[frame].push(cell);
+//     });
+//     return sorted;
+// }

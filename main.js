@@ -10,7 +10,7 @@ import { Hero } from "./src/objects/Hero/Hero.js";
 import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
 import { Inventory } from './src/objects/Inventory/Inventory.js';
-import { grid, map } from './src/levels/level1.js';
+import { grid } from './src/levels/level1.js';
 import { Map } from './src/objects/Map/Map.js';
 
 //get the canvas and context

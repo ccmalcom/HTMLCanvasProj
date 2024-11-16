@@ -1,29 +1,77 @@
 //spriteSheet is 5 high, 4 wide, 32x32 cell size
 
 import { GameObject } from "../../GameObject.js";
-import { groundMapping } from "../../helpers/spriteSheetMapping.js";
 import { resources } from "../../Resource.js";
 import { Sprite } from "../../sprite.js";
 import { Vector2 } from "../../Vector2.js";
 
 const spriteSheetMapping = {
-    topLeftGround: 1,
-    topMiddleGround: 2,
-    topRightGround: 3,
-    altMiddleGround: 4,
-    middleLeftGround: 5,
-    middleCenterGround: 6,
-    middleRightGround: 7,
-    water: 8,
-    bottomLeftGround: 9,
-    bottomMiddleGround: 10,
-    bottomRightGround: 11,
-    block: 12,
-    treeBottom: 13,
-    treeTop: 17,
-    bush: 18,
-    rock: 19,
-    house: 20
+    topLeftGround: 0,
+    topMiddleGround: 1,
+    topRightGround: 2,
+    altMiddleGround: 3,
+    middleLeftGround: 4,
+    middleCenterGround: 5,
+    middleRightGround: 6,
+    water: 7,
+    bottomLeftGround: 8,
+    bottomMiddleGround: 9,
+    bottomRightGround: 10,
+    block: 11,
+    treeBottom: 12,
+    treeTop: 16,
+    bush: 17,
+    rock: 18,
+    house: 19
+};
+
+const groundMapping = (x, y) => {
+    //input: `48,48`
+    //based on key, return  appropriate sprite frame (topLeftGround, topMiddleGround, etc)
+    //topLeftGround is lowest x&y value
+    //topMiddleGround is middle x, lowest y value
+    //topRightGround is highest x, lowest y value
+    //middleLeftGround is lowest x, middle y value
+    //middleCenterGround is middle x, middle y value
+    //middleRightGround is highest x, middle y value
+    //bottomLeftGround is lowest x, highest y value
+    //bottomMiddleGround is middle x, highest y value
+    //bottomRightGround is highest x, highest y value
+    // minX: 48
+    // maxX: 240
+    // minY: 32
+    // maxY: 96
+
+    //top row
+    if (y <= 48) {
+        if (x === 48) {
+            return spriteSheetMapping.topLeftGround;
+        } else if (x === 240) {
+            return spriteSheetMapping.topRightGround;
+        } else {
+            return spriteSheetMapping.topMiddleGround;
+        }
+    }
+    //middle row
+    else if (y > 48 && y < 96) {
+        if (x === 48) {
+            return spriteSheetMapping.middleLeftGround;
+        } else if (x === 240) {
+            return spriteSheetMapping.middleRightGround;
+        } else {
+            return spriteSheetMapping.middleCenterGround;
+        }
+    }
+    //bottom row
+    else {
+        if (x === 48) {
+            return spriteSheetMapping.bottomLeftGround;
+        } else if (x === 240) {
+            return spriteSheetMapping.bottomRightGround;
+        } else {
+            return spriteSheetMapping.bottomMiddleGround;
+        }
+    }
 }
 export class Map extends GameObject {
     constructor(grid) {
@@ -219,19 +267,6 @@ export class Map extends GameObject {
         //map is object, key is frame, value is cell location
         const spriteArray = [];
         //create sprite for each map cell 
-        //get min and max xy vals(cannot use grid.map)
-        const gridArr = Array.from(this.grid);
-        const xyVals = gridArr.map(cell => cell.split(',').map(Number));
-        const xVals = xyVals.map(xy => xy[0]);
-        const yVals = xyVals.map(xy => xy[1]);
-        const minX = Math.min(...xVals);
-        const maxX = Math.max(...xVals);
-        const minY = Math.min(...yVals);
-        const maxY = Math.max(...yVals);
-        console.log('minX:', minX);
-        console.log('maxX:', maxX);
-        console.log('minY:', minY);
-        console.log('maxY:', maxY);
         for (const cell of this.grid) {
             console.log('cell:', cell);
             //value is cell location (array)
