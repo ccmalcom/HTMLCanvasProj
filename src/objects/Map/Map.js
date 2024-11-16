@@ -208,14 +208,51 @@ export class Map extends GameObject {
         //     ]
         // ])
         super({});
-        this.grid = grid;
+        this.grid = grid ?? [];
         this.gridSize = 16;
-        this.buildMap();
+
     }
 
     buildMap() {
-
-
+        console.log('building map');
+        console.log('grid:', this.grid);
+        //map is object, key is frame, value is cell location
+        const spriteArray = [];
+        //create sprite for each map cell 
+        //get min and max xy vals(cannot use grid.map)
+        const gridArr = Array.from(this.grid);
+        const xyVals = gridArr.map(cell => cell.split(',').map(Number));
+        const xVals = xyVals.map(xy => xy[0]);
+        const yVals = xyVals.map(xy => xy[1]);
+        const minX = Math.min(...xVals);
+        const maxX = Math.max(...xVals);
+        const minY = Math.min(...yVals);
+        const maxY = Math.max(...yVals);
+        console.log('minX:', minX);
+        console.log('maxX:', maxX);
+        console.log('minY:', minY);
+        console.log('maxY:', maxY);
+        for (const cell of this.grid) {
+            console.log('cell:', cell);
+            //value is cell location (array)
+            //key is frame number from spritesheet
+            const [x, y] = cell.split(',').map(Number);
+            const frame = groundMapping(x, y);
+            console.log('frame:', frame);
+            const sprite = new Sprite({
+                resource: resources.images.spriteSheet,
+                frameSize: new Vector2(16, 16),
+                frame,
+                position: new Vector2(x, y),
+                hFrames: 4,
+                vFrames: 5
+            });
+            // console.log('sprite:', sprite);
+            spriteArray.push(sprite);
+        }
+        // console.log('spriteArray:', spriteArray);
+        return spriteArray;
     }
+
 
 }
