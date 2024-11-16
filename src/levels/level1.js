@@ -1,17 +1,34 @@
-export const walls = new Set();
+import { buildGrid } from "../helpers/grid";
 
-walls.add(`64,48`); // tree
 
-walls.add(`64,64`); // squares
-walls.add(`64,80`);
-walls.add(`80,64`);
-walls.add(`80,80`);
+const trees = [
+    { start: [2, 2] },
+    { start: [12, 1] },
+    { start: [11, 3] }
+]
+const rocks = [
+    { start: [10, 5] },
+    { start: [11, 5] },
+    { start: [12, 5] }
+]
+const water = [
+    { start: [5, 4], end: [8, 4] }
+]
+const squares = [
+    { start: [2, 3], end: [3, 3] },
+    { start: [2, 4], end: [3, 4] },
+    { start: [6, 2], end: [7, 2] }
+]
 
-walls.add(`128,48`); // squares
-walls.add(`144,48`);
+const levelWidth = 13;
+const levelHeight = 5;
+const cutouts = [
+    { start: [1, 1], end: [4, 1] },
+    { start: [13, 1] },
+    ...trees,
+    ...rocks,
+    ...water,
+    ...squares
+];
 
-walls.add(`112,80`); // water
-walls.add(`128,80`);
-walls.add(`144,80`);
-walls.add(`160,80`);
-
+export const grid = buildGrid(levelWidth, levelHeight, cutouts);

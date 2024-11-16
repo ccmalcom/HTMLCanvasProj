@@ -1,13 +1,10 @@
 import { GameObject } from "../../GameObject.js";
 import { Vector2 } from "../../Vector2.js";
 import { DOWN, LEFT, RIGHT, UP } from "../../Input.js";
-import { isSpaceFree } from "../../helpers/grid.js";
-import { walls } from "../../levels/level1.js";
-import { Sprite } from "../../Sprite.js";
+import { Sprite } from "../../sprite.js";
 import { resources } from "../../Resource.js";
 import { Animations } from "../../Animations.js";
 import { FrameIndexPattern } from "../../FrameIndexPattern.js";
-import { gridCells } from "../../helpers/grid.js";
 import { WALK_DOWN, WALK_UP, WALK_LEFT, WALK_RIGHT, STAND_DOWN, STAND_UP, STAND_LEFT, STAND_RIGHT, PICK_UP_DOWN } from "./HeroAnimations.js";
 import { moveTowards } from "../../helpers/moveTowards.js";
 import { events } from "../../Events.js";
@@ -16,7 +13,7 @@ import { events } from "../../Events.js";
 
 
 export class Hero extends GameObject {
-    constructor(x, y) {
+    constructor(x, y, grid) {
         super({
             position: new Vector2(x, y)
         })
@@ -53,6 +50,8 @@ export class Hero extends GameObject {
         this.destinationPosition = this.position.duplicate();
         this.itemPickupTime = 0;
         this.itemPickupShell = null;
+        this.grid = grid;
+        this.gridSize = 16;
 
         events.on("HERO_PICKS_UP_ITEM", this, data => {
             this.onPickupItem(data);
@@ -101,33 +100,42 @@ export class Hero extends GameObject {
             }
             return;
         }
+
         let nextX = this.destinationPosition.x;
         let nextY = this.destinationPosition.y;
-        const gridSize = 16;
         switch (input.direction) {
             case UP:
-                nextY -= gridSize;
+                nextY -= this.gridSize;
                 this.body.animations.play('walkUp');
                 break;
             case DOWN:
-                nextY += gridSize;
+                nextY += this.gridSize;
                 this.body.animations.play('walkDown');
                 break;
             case LEFT:
-                nextX -= gridSize;
+                nextX -= this.gridSize;
                 this.body.animations.play('walkLeft');
                 break;
             case RIGHT:
-                nextX += gridSize;
+                nextX += this.gridSize;
                 this.body.animations.play('walkRight');
                 break;
         }
         this.facingDirection = input.direction ?? this.facingDirection;
 
-        if (isSpaceFree(walls, nextX, nextY)) {
+        // Validate the move against the map grid
+        const nextPositionKey = `${nextX},${nextY}`;
+        if (this.grid.has(nextPositionKey)) {
             this.destinationPosition.x = nextX;
             this.destinationPosition.y = nextY;
+        } else {
+            console.log("Move blocked: not in grid");
         }
+
+        // if (isSpaceFree(walls, nextX, nextY)) {
+        //     this.destinationPosition.x = nextX;
+        //     this.destinationPosition.y = nextY;
+        // }
 
     }
 

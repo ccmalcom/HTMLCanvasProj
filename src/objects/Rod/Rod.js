@@ -1,6 +1,6 @@
 import { GameObject } from "../../GameObject";
 import { resources } from "../../Resource";
-import { Sprite } from "../../Sprite";
+import { Sprite } from "../../sprite";
 import { Vector2 } from "../../Vector2";
 import { events } from "../../Events";
 

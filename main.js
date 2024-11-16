@@ -1,42 +1,44 @@
 import './style.css'
 import { resources } from "./src/Resource.js";
-import { Sprite } from "./src/Sprite.js";
+import { Sprite } from './src/sprite.js';
 import { Vector2 } from "./src/Vector2.js";
 import { GameLoop } from "./src/GameLoop.js";
 import { Input } from "./src/Input.js";
 import { gridCells } from "./src/helpers/grid.js";
 import { GameObject } from "./src/GameObject.js";
 import { Hero } from "./src/objects/Hero/Hero.js";
-import { events } from "./src/Events.js";
 import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
 import { Inventory } from './src/objects/Inventory/Inventory.js';
+import { grid } from './src/levels/level1.js';
 
 
 //get the canvas and context
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-//create the main scene
+//create the main scene, parent of all other game objects in scene
 const mainScene = new GameObject({
   position: new Vector2(0, 0)
 });
 
-//add the sky and ground sprites
 //todo: move to a separate file when more than one level
+//add skySprite (background)
 const skySprite = new Sprite({
   resource: resources.images.sky,
   frameSize: new Vector2(320, 180)
 });
 
+//add groundSprite (player-level map)
 const groundSprite = new Sprite({
   resource: resources.images.ground,
   frameSize: new Vector2(320, 180)
 });
 mainScene.addChild(groundSprite);
 
-const hero = new Hero(gridCells(6), gridCells(5));
+const hero = new Hero(gridCells(3), gridCells(6), grid);
 mainScene.addChild(hero);
+
 
 //Camera
 const camera = new Camera();
