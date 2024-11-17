@@ -11,6 +11,7 @@ import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
 import { Inventory } from './src/objects/Inventory/Inventory.js';
 import { level1 } from './src/levels/level1.js';
+import { level2 } from './src/levels/level2.js';
 import { Map } from './src/objects/Map/Map.js';
 
 //get the canvas and context
