@@ -10,7 +10,7 @@ import { Hero } from "./src/objects/Hero/Hero.js";
 import { Camera } from './src/Camera.js';
 import { Rod } from './src/objects/Rod/Rod.js';
 import { Inventory } from './src/objects/Inventory/Inventory.js';
-import { grid } from './src/levels/level1.js';
+import { level1 } from './src/levels/level1.js';
 import { Map } from './src/objects/Map/Map.js';
 
 //get the canvas and context
@@ -39,13 +39,12 @@ const groundSprite = new Sprite({
 //TODO: make this better
 //1. make grid and make map could be combined
 
-const mapSprite = new Map(grid);
-mapSprite.buildMap().forEach(sprite => {
+level1.spriteArray.forEach(sprite => {
   console.log('sprite:', sprite);
   mainScene.addChild(sprite);
 });
 
-const hero = new Hero(gridCells(3), gridCells(6), grid);
+const hero = new Hero(gridCells(3), gridCells(6), level1.playableArea);
 mainScene.addChild(hero);
 
 

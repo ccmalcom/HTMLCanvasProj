@@ -4,6 +4,8 @@ import { GameObject } from "../../GameObject.js";
 import { resources } from "../../Resource.js";
 import { Sprite } from "../../sprite.js";
 import { Vector2 } from "../../Vector2.js";
+import { buildGrid, getGridDetails } from "../../helpers/grid.js";
+// import { cutouts } from "../../levels/level1.js";
 
 const spriteSheetMapping = {
     topLeftGround: 0,
@@ -73,8 +75,8 @@ const groundMapping = (x, y) => {
         }
     }
 }
-export class Map extends GameObject {
-    constructor(grid) {
+export class Map {
+    constructor(width, height, mapItems, cutouts) {
         //place appropriate sprites from spriteSheetMapping on the grid
         //grid:
         // Map([
@@ -255,25 +257,29 @@ export class Map extends GameObject {
         //         "bottomRight"
         //     ]
         // ])
-        super({});
-        this.grid = grid ?? [];
-        this.gridSize = 16;
+        this.width = width ?? 13;
+        this.height = height + 1 ?? 5;
+        this.mapItems = mapItems ?? {};
+        this.cutouts = cutouts ?? [];
 
+        console.log('playablearea:', this.width, this.height - 1);
+        this.playableArea = buildGrid(this.width, this.height - 1, this.cutouts);
+        this.mapArea = buildGrid(this.width, this.height, this.cutouts);
+        this.spriteArray = this.buildMap();
     }
 
     buildMap() {
         console.log('building map');
-        console.log('grid:', this.grid);
+        //bottom of map is inaccessible, so need to add 1 row to the bottom (y=16+maxy) (x=minx-maxx)
+
         //map is object, key is frame, value is cell location
         const spriteArray = [];
         //create sprite for each map cell 
-        for (const cell of this.grid) {
-            console.log('cell:', cell);
+        for (const cell of this.mapArea) {
             //value is cell location (array)
             //key is frame number from spritesheet
             const [x, y] = cell.split(',').map(Number);
             const frame = groundMapping(x, y);
-            console.log('frame:', frame);
             const sprite = new Sprite({
                 resource: resources.images.spriteSheet,
                 frameSize: new Vector2(16, 16),
@@ -282,10 +288,9 @@ export class Map extends GameObject {
                 hFrames: 4,
                 vFrames: 5
             });
-            // console.log('sprite:', sprite);
             spriteArray.push(sprite);
         }
-        // console.log('spriteArray:', spriteArray);
+        console.log(spriteArray);
         return spriteArray;
     }
 

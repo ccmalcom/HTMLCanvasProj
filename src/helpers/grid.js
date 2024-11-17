@@ -11,6 +11,22 @@ export const isSpaceFree = (walls, x, y) => {
     return !isWallPresent;
 }
 
+export const getGridDetails = (grid) => {
+    const gridArray = Array.from(grid);
+    let minX = gridArray[0].split(',')[0]; // first value of first cell
+    console.log('minX:', minX);
+    let maxX = gridArray[gridArray.length - 1].split(',')[0]; // first value of last cell
+    //must map through second value of cells to get min and max y
+    const yArray = gridArray.map(cell => cell.split(',')[1]);
+    let minY = Math.min(...yArray);
+    let maxY = Math.max(...yArray);
+    let gridWidth = maxX - minX;
+    let gridHeight = maxY - minY;
+
+
+    return { minX, maxX, minY, maxY, gridWidth, gridHeight };
+}
+
 //TODO: combine buildGrid and buildMap functions
 // grid used to set map, put tiles on map, and add items to tiles
 // map also keeps track of items on tiles
@@ -36,6 +52,7 @@ export const buildGrid = (width, height, cutouts) => {
         }
     }
     console.log('initial grid created:', grid);
+
     //remove cutouts 
     //cutouts: [{start:[1,1], end:[4,1]},{start:[13,1]} ]
     //translate x+2, y+1
