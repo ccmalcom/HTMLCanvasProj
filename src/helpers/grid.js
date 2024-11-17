@@ -14,7 +14,6 @@ export const isSpaceFree = (walls, x, y) => {
 export const getGridDetails = (grid) => {
     const gridArray = Array.from(grid);
     let minX = gridArray[0].split(',')[0]; // first value of first cell
-    console.log('minX:', minX);
     let maxX = gridArray[gridArray.length - 1].split(',')[0]; // first value of last cell
     //must map through second value of cells to get min and max y
     const yArray = gridArray.map(cell => cell.split(',')[1]);
@@ -22,7 +21,6 @@ export const getGridDetails = (grid) => {
     let maxY = Math.max(...yArray);
     let gridWidth = maxX - minX;
     let gridHeight = maxY - minY;
-
 
     return { minX, maxX, minY, maxY, gridWidth, gridHeight };
 }

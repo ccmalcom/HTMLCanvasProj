@@ -39,10 +39,11 @@ const groundSprite = new Sprite({
 //TODO: make this better
 //1. make grid and make map could be combined
 
-level1.spriteArray.forEach(sprite => {
-  console.log('sprite:', sprite);
-  mainScene.addChild(sprite);
-});
+// level1.spriteArray.forEach(sprite => {
+//   // console.log('sprite:', sprite);
+//   mainScene.addChild(sprite);
+// });
+mainScene.addChild(level1)
 
 const hero = new Hero(gridCells(3), gridCells(6), level1.playableArea);
 mainScene.addChild(hero);

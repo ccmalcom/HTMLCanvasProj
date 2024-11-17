@@ -4,79 +4,12 @@ import { GameObject } from "../../GameObject.js";
 import { resources } from "../../Resource.js";
 import { Sprite } from "../../sprite.js";
 import { Vector2 } from "../../Vector2.js";
-import { buildGrid, getGridDetails } from "../../helpers/grid.js";
+import { buildGrid, getGridDetails, gridCells } from "../../helpers/grid.js";
 // import { cutouts } from "../../levels/level1.js";
 
-const spriteSheetMapping = {
-    topLeftGround: 0,
-    topMiddleGround: 1,
-    topRightGround: 2,
-    altMiddleGround: 3,
-    middleLeftGround: 4,
-    middleCenterGround: 5,
-    middleRightGround: 6,
-    water: 7,
-    bottomLeftGround: 8,
-    bottomMiddleGround: 9,
-    bottomRightGround: 10,
-    block: 11,
-    treeBottom: 12,
-    treeTop: 16,
-    bush: 17,
-    rock: 18,
-    house: 19
-};
-
-const groundMapping = (x, y) => {
-    //input: `48,48`
-    //based on key, return  appropriate sprite frame (topLeftGround, topMiddleGround, etc)
-    //topLeftGround is lowest x&y value
-    //topMiddleGround is middle x, lowest y value
-    //topRightGround is highest x, lowest y value
-    //middleLeftGround is lowest x, middle y value
-    //middleCenterGround is middle x, middle y value
-    //middleRightGround is highest x, middle y value
-    //bottomLeftGround is lowest x, highest y value
-    //bottomMiddleGround is middle x, highest y value
-    //bottomRightGround is highest x, highest y value
-    // minX: 48
-    // maxX: 240
-    // minY: 32
-    // maxY: 96
-
-    //top row
-    if (y <= 48) {
-        if (x === 48) {
-            return spriteSheetMapping.topLeftGround;
-        } else if (x === 240) {
-            return spriteSheetMapping.topRightGround;
-        } else {
-            return spriteSheetMapping.topMiddleGround;
-        }
-    }
-    //middle row
-    else if (y > 48 && y < 96) {
-        if (x === 48) {
-            return spriteSheetMapping.middleLeftGround;
-        } else if (x === 240) {
-            return spriteSheetMapping.middleRightGround;
-        } else {
-            return spriteSheetMapping.middleCenterGround;
-        }
-    }
-    //bottom row
-    else {
-        if (x === 48) {
-            return spriteSheetMapping.bottomLeftGround;
-        } else if (x === 240) {
-            return spriteSheetMapping.bottomRightGround;
-        } else {
-            return spriteSheetMapping.bottomMiddleGround;
-        }
-    }
-}
-export class Map {
-    constructor(width, height, mapItems, cutouts) {
+export class Map extends GameObject {
+    constructor(width, height, mapItems, cutouts, resource, resourceMapping) {
+        super({});
         //place appropriate sprites from spriteSheetMapping on the grid
         //grid:
         // Map([
@@ -261,37 +194,112 @@ export class Map {
         this.height = height + 1 ?? 5;
         this.mapItems = mapItems ?? {};
         this.cutouts = cutouts ?? [];
+        this.resource = resource ?? resources.images.spriteSheet;
+        this.resourceMapping = resourceMapping ?? {};
 
         console.log('playablearea:', this.width, this.height - 1);
         this.playableArea = buildGrid(this.width, this.height - 1, this.cutouts);
         this.mapArea = buildGrid(this.width, this.height, this.cutouts);
-        this.spriteArray = this.buildMap();
+        this.gridDetails = { ...getGridDetails(this.mapArea) };
+        this.buildMap();
     }
 
     buildMap() {
         console.log('building map');
         //bottom of map is inaccessible, so need to add 1 row to the bottom (y=16+maxy) (x=minx-maxx)
-
-        //map is object, key is frame, value is cell location
-        const spriteArray = [];
         //create sprite for each map cell 
         for (const cell of this.mapArea) {
             //value is cell location (array)
             //key is frame number from spritesheet
             const [x, y] = cell.split(',').map(Number);
-            const frame = groundMapping(x, y);
-            const sprite = new Sprite({
-                resource: resources.images.spriteSheet,
+            const frame = this.groundMapping(x, y);
+            const mapCell = new Sprite({
+                resource: this.resource,
                 frameSize: new Vector2(16, 16),
                 frame,
                 position: new Vector2(x, y),
                 hFrames: 4,
                 vFrames: 5
             });
-            spriteArray.push(sprite);
+            this.addChild(mapCell);
+            console.log('cell added');
         }
-        console.log(spriteArray);
-        return spriteArray;
+        if (this.mapItems) {
+            this.addItems();
+        }
+        console.log('map built');
+    }
+
+    groundMapping(x, y) {
+
+        const { minX, maxX, minY, maxY } = this.gridDetails;
+        //todo: use cutouts to determine if grid has extra corners
+        //top row
+        if (y <= minY) {
+            if (x == minX) {
+                return this.resourceMapping.topLeftGround;
+            } else if (x == maxX) {
+                return this.resourceMapping.topRightGround;
+            } else {
+                return this.resourceMapping.topMiddleGround;
+            }
+        }
+        //middle row
+        else if (y > minY && y < maxY) {
+            if (x == minX) {
+                return this.resourceMapping.middleLeftGround;
+            } else if (x == maxX) {
+                return this.resourceMapping.middleRightGround;
+            } else {
+                return this.resourceMapping.middleCenterGround;
+            }
+        }
+        //bottom row
+        else {
+            if (x == minX) {
+                return this.resourceMapping.bottomLeftGround;
+            } else if (x == maxX) {
+                return this.resourceMapping.bottomRightGround;
+            } else {
+                return this.resourceMapping.bottomMiddleGround;
+            }
+        }
+    }
+
+    addItems() {
+        //add items to map
+        //trees, rocks, water, squares
+        //this.mapItems = { trees: [{}], rocks: [{}], water: [{}], squares: [{}] }
+        console.log('adding items to map');
+        for (const type in this.mapItems) {
+            const items = this.mapItems[type];
+            items.forEach(item => {
+                const frame = this.resourceMapping[type];
+                const start = item.start;
+                const end = item.end ?? item.start;
+                for (let x = start[0] + 2; x <= end[0] + 2; x++) {
+                    for (let y = start[1] + 1; y <= end[1] + 1; y++) {
+                        const str = `${gridCells(x)},${gridCells(y)}`;
+                        const posX = gridCells(x);
+                        const posY = gridCells(y);
+                        const itemCell = new Sprite({
+                            resource: this.resource,
+                            frameSize: new Vector2(16, 16),
+                            frame,
+                            position: new Vector2(posX, posY),
+                            hFrames: 4,
+                            vFrames: 5
+                        });
+                        //add item to map
+                        this.addChild(itemCell);
+                        //remove item from playable area
+                        //todo: change this logic as some items may be interactable
+                        //i.e. rod, currently is own class, probably would follow this
+                        this.playableArea.delete(str);
+                    }
+                }
+            });
+        }
     }
 
 
